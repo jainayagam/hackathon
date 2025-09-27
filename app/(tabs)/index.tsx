@@ -1,98 +1,360 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+//
+// import {AuthProvider} from "../AuthContext";
+// import {NavigationContainer} from '@react-navigation/native';
+// import {createNativeStackNavigator} from '@react-navigation/native-stack';
+//
+//
+//
+// import React from "react";
+// import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+// import { MaterialCommunityIcons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+//
+// export default function Index() {
+//     return (
+//         <View style={styles.container}>
+//             {/* Top Nav */}
+//             <View style={styles.topNav}>
+//                 <TouchableOpacity style={styles.navButton}>
+//                     <MaterialCommunityIcons name="menu" size={28} color="#E0E0E0" />
+//                 </TouchableOpacity>
+//                 <Text style={styles.navTitle}>Campus Utility</Text>
+//                 <TouchableOpacity style={styles.navButton}>
+//                     <MaterialIcons name="person" size={28} color="#E0E0E0" />
+//                 </TouchableOpacity>
+//             </View>
+//
+//             <ScrollView contentContainerStyle={{paddingTop: 14}}>
+//                 <Text style={styles.header}>Services</Text>
+//                 <View style={styles.grid}>
+//                     <ServiceCard icon={<MaterialCommunityIcons name="bus" size={48} color="#fff" />} label="Shuttle" />
+//                     <ServiceCard icon={<MaterialCommunityIcons name="washing-machine" size={48} color="#fff" />} label="Paid Laundry" />
+//                     <ServiceCard icon={<MaterialCommunityIcons name="storefront-outline" size={48} color="#fff" />} label="Shawarma Shop" />
+//                     <ServiceCard icon={<MaterialCommunityIcons name="food" size={48} color="#fff" />} label="One Food World" />
+//                     <ServiceCard icon={<MaterialCommunityIcons name="coffee" size={48} color="#fff" />} label="Nescafe" />
+//                 </View>
+//             </ScrollView>
+//
+//             {/* Bottom Tab Bar */}
+//             <View style={styles.tabBar}>
+//                 <TabItem icon={<MaterialIcons name="home" size={28} />} label="Home" active />
+//                 <TabItem icon={<MaterialIcons name="person-outline" size={28} />} label="Profile" />
+//                 <TabItem icon={<MaterialIcons name="trending-up" size={28} />} label="Trends" />
+//                 <TabItem icon={<MaterialIcons name="settings" size={28} />} label="Settings" />
+//             </View>
+//         </View>
+//     );
+// }
+//
+// function ServiceCard({ icon, label }) {
+//     return (
+//         <View style={styles.card}>
+//             <View style={styles.cardIconWrap}>{icon}</View>
+//             <Text style={styles.cardLabel}>{label}</Text>
+//         </View>
+//     );
+// }
+//
+// function TabItem({ icon, label, active }) {
+//     return (
+//         <View style={styles.tabItem}>
+//             {React.cloneElement(icon, { color: active ? "#2591fa" : "#A0A0A0" })}
+//             <Text style={[styles.tabLabel, active && { color: "#2591fa", fontWeight: "bold" }]}>{label}</Text>
+//         </View>
+//     );
+// }
+//
+// const styles = StyleSheet.create({
+//     container: {
+//         flex: 1,
+//         backgroundColor: "#181818",
+//     },
+//     topNav: {
+//         flexDirection: "row",
+//         alignItems: "center",
+//         justifyContent: "space-between",
+//         paddingHorizontal: 18,
+//         paddingTop: 36,
+//         paddingBottom: 10,
+//     },
+//     navButton: {
+//         width: 48,
+//         height: 48,
+//         borderRadius: 24,
+//         alignItems: "center",
+//         justifyContent: "center",
+//         backgroundColor: "#232323",
+//     },
+//     navTitle: {
+//         flex: 1,
+//         textAlign: "center",
+//         fontSize: 26,
+//         fontWeight: "bold",
+//         color: "#EFEFEF",
+//         letterSpacing: 0.5,
+//     },
+//     header: {
+//         fontSize: 36,
+//         fontWeight: "bold",
+//         color: "#E0E0E0",
+//         marginLeft: 16,
+//         marginBottom: 20,
+//     },
+//     grid: {
+//         flexDirection: "row",
+//         flexWrap: "wrap",
+//         justifyContent: "center",
+//     },
+//     card: {
+//         width: 150,
+//         height: 168,
+//         backgroundColor: "#222",
+//         margin: 12,
+//         borderRadius: 22,
+//         alignItems: "center",
+//         justifyContent: "center",
+//         shadowColor: "#000",
+//         shadowOpacity: 0.06,
+//         shadowRadius: 4,
+//     },
+//     cardIconWrap: {
+//         backgroundColor: "#2591fa",
+//         borderRadius: 64,
+//         width: 88,
+//         height: 88,
+//         justifyContent: "center",
+//         alignItems: "center",
+//         marginBottom: 10,
+//     },
+//     cardLabel: {
+//         color: "#dedede",
+//         fontWeight: "bold",
+//         fontSize: 19,
+//         textAlign: "center",
+//         marginTop: 2,
+//     },
+//     tabBar: {
+//         height: 65,
+//         flexDirection: "row",
+//         backgroundColor: "#1E1E1E",
+//         borderTopWidth: 1,
+//         borderColor: "#232323",
+//         alignItems: "center",
+//         justifyContent: "space-around",
+//     },
+//     tabItem: {
+//         flex: 1,
+//         alignItems: "center",
+//         justifyContent: "center",
+//     },
+//     tabLabel: {
+//         fontSize: 14,
+//         color: "#A0A0A0",
+//         marginTop: 2,
+//     }
+// });
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+
+
+// import React, { useState } from "react";
+// import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+// import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+//
+// import Profile from './profile';   // Import your Profile component
+// // import Trends from './Trends';     // Import your Trends component
+// // import Settings from './Settings'; // Import your Settings component
+//
+// export default function Index() {
+//     const [activeTab, setActiveTab] = useState("Home");
+//
+//     const renderActiveScreen = () => {
+//         switch (activeTab) {
+//             case "Home":
+//                 return <Home />;
+//             case "Profile":
+//                 return <Profile />;
+//             case "Trends":
+//                 return <Trends />;
+//             case "Settings":
+//                 return <Settings />;
+//             default:
+//                 return <Home />;
+//         }
+//     };
+//
+//     return (
+//         <View style={styles.container}>
+//             {/* Top Nav */}
+//             <View style={styles.topNav}>
+//                 <TouchableOpacity style={styles.navButton}>
+//                     <MaterialCommunityIcons name="menu" size={28} color="#E0E0E0" />
+//                 </TouchableOpacity>
+//                 <Text style={styles.navTitle}>Campus Utility</Text>
+//                 <TouchableOpacity style={styles.navButton}>
+//                     <MaterialIcons name="person" size={28} color="#E0E0E0" />
+//                 </TouchableOpacity>
+//             </View>
+//
+//             <ScrollView contentContainerStyle={{ paddingTop: 14 }}>
+//                 {activeTab === "Home" && (
+//                     <>
+//                         <Text style={styles.header}>Services</Text>
+//                         <View style={styles.grid}>
+//                             <ServiceCard icon={<MaterialCommunityIcons name="bus" size={48} color="#fff" />} label="Shuttle" />
+//                             <ServiceCard icon={<MaterialCommunityIcons name="washing-machine" size={48} color="#fff" />} label="Paid Laundry" />
+//                             <ServiceCard icon={<MaterialCommunityIcons name="storefront-outline" size={48} color="#fff" />} label="Shawarma Shop" />
+//                             <ServiceCard icon={<MaterialCommunityIcons name="food" size={48} color="#fff" />} label="One Food World" />
+//                             <ServiceCard icon={<MaterialCommunityIcons name="coffee" size={48} color="#fff" />} label="Nescafe" />
+//                         </View>
+//                     </>
+//                 )}
+//                 {activeTab === "Profile" && <Profile />}
+//                 {activeTab === "Trends" && <Trends />}
+//                 {activeTab === "Settings" && <Settings />}
+//             </ScrollView>
+//
+//             {/* Bottom Tab Bar */}
+//             <View style={styles.tabBar}>
+//                 <TabItem isActive={activeTab === "Home"} icon={<MaterialIcons name="home" size={28} />} label="Home" onPress={() => setActiveTab("Home")} />
+//                 <TabItem isActive={activeTab === "Profile"} icon={<MaterialIcons name="person-outline" size={28} />} label="Profile" onPress={() => setActiveTab("Profile")} />
+//                 <TabItem isActive={activeTab === "Trends"} icon={<MaterialIcons name="trending-up" size={28} />} label="Trends" onPress={() => setActiveTab("Trends")} />
+//                 <TabItem isActive={activeTab === "Settings"} icon={<MaterialIcons name="settings" size={28} />} label="Settings" onPress={() => setActiveTab("Settings")} />
+//             </View>
+//         </View>
+//     );
+// }
+//
+// function ServiceCard({ icon, label }) {
+//     return (
+//         <View style={styles.card}>
+//             <View style={styles.cardIconWrap}>{icon}</View>
+//             <Text style={styles.cardLabel}>{label}</Text>
+//         </View>
+//     );
+// }
+//
+// function TabItem({ icon, label, isActive, onPress }) {
+//     return (
+//         <TouchableOpacity style={styles.tabItem} onPress={onPress}>
+//             {React.cloneElement(icon, { color: isActive ? "#2591fa" : "#A0A0A0" })}
+//             <Text style={[styles.tabLabel, isActive && { color: "#2591fa", fontWeight: "bold" }]}>{label}</Text>
+//         </TouchableOpacity>
+//     );
+// }
+//
+// const styles = StyleSheet.create({
+//     // same as your existing styles
+// });
+
+
+import React from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+
+export default function Index() {
+
+    return (
+        <View style={styles.container}>
+            {/* Top Nav */}
+            <View style={styles.topNav}>
+                <TouchableOpacity style={styles.navButton}>
+                    <MaterialCommunityIcons name="menu" size={30} color="#E0E0E0" />
+                </TouchableOpacity>
+                <Text style={styles.navTitle}>Campus Utility</Text>
+                <TouchableOpacity style={styles.navButton}>
+                    <MaterialIcons name="person" size={30} color="#E0E0E0" />
+                </TouchableOpacity>
+            </View>
+
+            <ScrollView contentContainerStyle={{ paddingTop: 22 }}>
+                <Text style={styles.header}>Services</Text>
+                <View style={styles.grid}>
+                    <ServiceCard icon={<MaterialCommunityIcons name="bus" size={48} color="#fff" />} label="Shuttle" />
+                    <ServiceCard icon={<MaterialCommunityIcons name="washing-machine" size={48} color="#fff" />} label="Paid Laundry" />
+                    <ServiceCard icon={<MaterialCommunityIcons name="storefront-outline" size={48} color="#fff" />} label="Shawarma Shop" />
+                    <ServiceCard icon={<MaterialCommunityIcons name="food" size={48} color="#fff" />} label="One Food World" />
+                    <ServiceCard icon={<MaterialCommunityIcons name="coffee" size={48} color="#fff" />} label="Nescafe" />
+                </View>
+            </ScrollView>
+        </View>
+    );
+}
+
+function ServiceCard({ icon, label }) {
+    return (
+        <View style={styles.card}>
+            <View style={styles.cardIconWrap}>{icon}</View>
+            <Text style={styles.cardLabel}>{label}</Text>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: "#181818",
+    },
+    topNav: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingHorizontal: 16,
+        paddingTop: 40,
+        paddingBottom: 10,
+    },
+    navButton: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#222",
+    },
+    navTitle: {
+        flex: 1,
+        textAlign: "center",
+        fontSize: 26,
+        fontWeight: "bold",
+        color: "#E0E0E0",
+    },
+    header: {
+        fontSize: 36,
+        fontWeight: "bold",
+        color: "#D9DBDE",
+        marginLeft: 18,
+        marginBottom: 18,
+        letterSpacing: 0.5,
+    },
+    grid: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "center",
+    },
+    card: {
+        width: 170,
+        height: 170,
+        backgroundColor: "#222",
+        margin: 12,
+        borderRadius: 22,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    cardIconWrap: {
+        backgroundColor: "#2591fa",
+        borderRadius: 64,
+        width: 90,
+        height: 90,
+        justifyContent: "center",
+        alignItems: "center",
+        marginBottom: 15,
+    },
+    cardLabel: {
+        color: "#f3f3f3",
+        fontWeight: "bold",
+        fontSize: 18,
+        textAlign: "center",
+        marginTop: 2,
+        letterSpacing: 0.2,
+    },
 });
