@@ -556,7 +556,7 @@ export default function MenuPage() {
 
     const openUpiApp = async () => {
         const payeeVPA = "campuscanteen@upi";
-        const payeeName = "Campus Canteen";
+        const payeeName = "Nescafe";
         const transactionRef = `order_${Date.now()}`;
         const deeplink = `upi://pay?pa=${encodeURIComponent(payeeVPA)}&pn=${encodeURIComponent(payeeName)}&tr=${encodeURIComponent(transactionRef)}&tn=${encodeURIComponent("Food order payment")}&am=${encodeURIComponent(paymentAmount)}&cu=INR&mc=0000`;
 
@@ -575,7 +575,7 @@ export default function MenuPage() {
             await sendTransactionToBackend(
                 "Tijil",
                 Number(paymentAmount),// payee
-                "Nescafe",          // vendor
+                "nescafe",          // vendor
                 orderMap     // order object
                  // amount
             );

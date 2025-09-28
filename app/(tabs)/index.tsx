@@ -334,7 +334,9 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import Sidebar from "./Sidebar"; // Sidebar component
-import { openUpiApp } from "./ShuttlePay"; // UPI payment function
+import { openUpiApp } from "./ShuttlePay";
+import OneFood from "@/app/(tabs)/OneFoodWorld";
+import TransactionHistory from "@/app/(tabs)/TransactionHistory"; // UPI payment function
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
 const sidebarWidth = screenWidth * 0.75;
@@ -439,7 +441,12 @@ export default function Index() {
                         </TouchableOpacity>
                         <ServiceCard icon={<MaterialCommunityIcons name="washing-machine" size={48} color="#fff" />} label="Paid Laundry" />
                         <ServiceCard icon={<MaterialCommunityIcons name="storefront-outline" size={48} color="#fff" />} label="Shawarma Shop" />
-                        <ServiceCard icon={<MaterialCommunityIcons name="food" size={48} color="#fff" />} label="One Food World" />
+                        <TouchableOpacity onPress={() => setSelectedPage('OneFood')}>
+                            <ServiceCard
+                                icon={<MaterialCommunityIcons name="coffee" size={48} color="#fff" />}
+                                label="One Food World"
+                            />
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => setSelectedPage('Menu')}>
                             <ServiceCard
                                 icon={<MaterialCommunityIcons name="coffee" size={48} color="#fff" />}
@@ -460,6 +467,9 @@ export default function Index() {
 
             {selectedPage === "Menu" && <MenuPage />}
 
+            {selectedPage === "OneFood" && <OneFood />}
+
+            {selectedPage === "TransactionHistory" && <TransactionHistory/>}
             {selectedPage === "Logout" && (
                 <View style={pageStyles.pageContainer}>
                     <Text style={pageStyles.pageTitle}>Logout Page</Text>

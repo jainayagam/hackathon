@@ -67,6 +67,9 @@ export default function Sidebar({ onClose, onNavigate }: SidebarProps) {
                 <TouchableOpacity onPress={() => handleItemPress("Home")}>
                     <Text style={styles.menuItem}>Home</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleItemPress("TransactionHistory")}>
+                    <Text style={styles.menuItem}>Transaction History</Text>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleItemPress("Profile")}>
                     <Text style={styles.menuItem}>Profile</Text>
                 </TouchableOpacity>
