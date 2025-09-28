@@ -1,32 +1,111 @@
+// import React, { useState, useRef, useEffect } from "react";
+// import {
+//     View,
+//     Text,
+//     StyleSheet,
+//     ScrollView,
+//     TouchableOpacity,
+//     Modal,
+//     Animated,
+//     PanResponder,
+//     Dimensions,
+// } from "react-native";
+// import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+// import Sidebar from "./Sidebar"; // Sidebar component in separate file
+// import { openUpiApp } from "./ShuttlePay"; // UPI payment function
 //
-// import {AuthProvider} from "../AuthContext";
-// import {NavigationContainer} from '@react-navigation/native';
-// import {createNativeStackNavigator} from '@react-navigation/native-stack';
-//
-//
-//
-// import React from "react";
-// import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-// import { MaterialCommunityIcons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+// const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
+// const sidebarWidth = screenWidth * 0.75;
 //
 // export default function Index() {
+//     const [modalVisible, setModalVisible] = useState(false);
+//     const [sidebarVisible, setSidebarVisible] = useState(false);
+//     const panY = useRef(new Animated.Value(screenHeight)).current;
+//     const sidebarTranslateX = useRef(new Animated.Value(-sidebarWidth)).current;
+//
+//     // Animate modal popup
+//     const resetPosition = () => {
+//         Animated.timing(panY, {
+//             toValue: 0,
+//             duration: 300,
+//             useNativeDriver: true,
+//         }).start();
+//     };
+//     const closeModal = () => {
+//         Animated.timing(panY, {
+//             toValue: screenHeight,
+//             duration: 300,
+//             useNativeDriver: true,
+//         }).start(() => setModalVisible(false));
+//     };
+//
+//     const panResponder = useRef(
+//         PanResponder.create({
+//             onStartShouldSetPanResponder: () => true,
+//             onPanResponderMove: (evt, gestureState) => {
+//                 if (gestureState.dy > 0) {
+//                     panY.setValue(gestureState.dy);
+//                 }
+//             },
+//             onPanResponderRelease: (evt, gestureState) => {
+//                 if (gestureState.dy > 100) {
+//                     closeModal();
+//                 } else {
+//                     resetPosition();
+//                 }
+//             },
+//         })
+//     ).current;
+//
+//     // Animate sidebar slide in/out
+//     useEffect(() => {
+//         if (sidebarVisible) {
+//             Animated.timing(sidebarTranslateX, {
+//                 toValue: 0,
+//                 duration: 300,
+//                 useNativeDriver: true,
+//             }).start();
+//         } else {
+//             Animated.timing(sidebarTranslateX, {
+//                 toValue: -sidebarWidth,
+//                 duration: 300,
+//                 useNativeDriver: true,
+//             }).start();
+//         }
+//     }, [sidebarVisible]);
+//
+//     const openModal = () => {
+//         setModalVisible(true);
+//         resetPosition();
+//     };
+//
+//     const closeSidebar = () => setSidebarVisible(false);
+//
 //     return (
 //         <View style={styles.container}>
 //             {/* Top Nav */}
 //             <View style={styles.topNav}>
-//                 <TouchableOpacity style={styles.navButton}>
-//                     <MaterialCommunityIcons name="menu" size={28} color="#E0E0E0" />
+//                 <TouchableOpacity
+//                     style={styles.navButton}
+//                     onPress={() => setSidebarVisible(true)}
+//                 >
+//                     <MaterialCommunityIcons name="menu" size={30} color="#E0E0E0" />
 //                 </TouchableOpacity>
 //                 <Text style={styles.navTitle}>Campus Utility</Text>
 //                 <TouchableOpacity style={styles.navButton}>
-//                     <MaterialIcons name="person" size={28} color="#E0E0E0" />
+//                     <MaterialIcons name="person" size={30} color="#E0E0E0" />
 //                 </TouchableOpacity>
 //             </View>
 //
-//             <ScrollView contentContainerStyle={{paddingTop: 14}}>
+//             <ScrollView contentContainerStyle={{ paddingTop: 22 }}>
 //                 <Text style={styles.header}>Services</Text>
 //                 <View style={styles.grid}>
-//                     <ServiceCard icon={<MaterialCommunityIcons name="bus" size={48} color="#fff" />} label="Shuttle" />
+//                     <TouchableOpacity onPress={openModal}>
+//                         <ServiceCard
+//                             icon={<MaterialCommunityIcons name="bus" size={48} color="#fff" />}
+//                             label="Shuttle"
+//                         />
+//                     </TouchableOpacity>
 //                     <ServiceCard icon={<MaterialCommunityIcons name="washing-machine" size={48} color="#fff" />} label="Paid Laundry" />
 //                     <ServiceCard icon={<MaterialCommunityIcons name="storefront-outline" size={48} color="#fff" />} label="Shawarma Shop" />
 //                     <ServiceCard icon={<MaterialCommunityIcons name="food" size={48} color="#fff" />} label="One Food World" />
@@ -34,13 +113,54 @@
 //                 </View>
 //             </ScrollView>
 //
-//             {/* Bottom Tab Bar */}
-//             <View style={styles.tabBar}>
-//                 <TabItem icon={<MaterialIcons name="home" size={28} />} label="Home" active />
-//                 <TabItem icon={<MaterialIcons name="person-outline" size={28} />} label="Profile" />
-//                 <TabItem icon={<MaterialIcons name="trending-up" size={28} />} label="Trends" />
-//                 <TabItem icon={<MaterialIcons name="settings" size={28} />} label="Settings" />
-//             </View>
+//             {/* Sidebar Modal */}
+//             <Modal
+//                 visible={sidebarVisible}
+//                 animationType="none"
+//                 transparent
+//                 onRequestClose={closeSidebar}
+//             >
+//                 <TouchableOpacity
+//                     style={styles.sidebarBackdrop}
+//                     activeOpacity={1}
+//                     onPress={closeSidebar}
+//                 />
+//                 <Animated.View
+//                     style={[
+//                         styles.sidebarContainer,
+//                         { width: sidebarWidth, transform: [{ translateX: sidebarTranslateX }] },
+//                     ]}
+//                 >
+//                     <Sidebar onClose={closeSidebar} />
+//                 </Animated.View>
+//             </Modal>
+//
+//             {/* Payment Modal */}
+//             <Modal
+//                 visible={modalVisible}
+//                 animationType="none"
+//                 transparent
+//                 onRequestClose={closeModal}
+//             >
+//                 <View style={styles.modalOverlay}>
+//                     <Animated.View
+//                         style={[styles.modalContent, { transform: [{ translateY: panY }] }]}
+//                         {...panResponder.panHandlers}
+//                     >
+//                         <View style={styles.modalHandle} />
+//                         <Text style={styles.modalTitle}>Complete Payment</Text>
+//                         <Text style={styles.modalSubtitle}>You are about to pay</Text>
+//                         <Text style={styles.modalAmount}>₹20.00</Text>
+//                         <Text style={styles.modalTo}>to Campus Canteen</Text>
+//                         <TouchableOpacity style={styles.modalButton} onPress={openUpiApp}>
+//                             <Text style={styles.modalButtonText}>Open UPI App</Text>
+//                         </TouchableOpacity>
+//                         <Text style={styles.modalNote}>
+//                             You will be redirected to your UPI app to complete the payment.
+//                         </Text>
+//                     </Animated.View>
+//                 </View>
+//             </Modal>
 //         </View>
 //     );
 // }
@@ -50,15 +170,6 @@
 //         <View style={styles.card}>
 //             <View style={styles.cardIconWrap}>{icon}</View>
 //             <Text style={styles.cardLabel}>{label}</Text>
-//         </View>
-//     );
-// }
-//
-// function TabItem({ icon, label, active }) {
-//     return (
-//         <View style={styles.tabItem}>
-//             {React.cloneElement(icon, { color: active ? "#2591fa" : "#A0A0A0" })}
-//             <Text style={[styles.tabLabel, active && { color: "#2591fa", fontWeight: "bold" }]}>{label}</Text>
 //         </View>
 //     );
 // }
@@ -72,8 +183,8 @@
 //         flexDirection: "row",
 //         alignItems: "center",
 //         justifyContent: "space-between",
-//         paddingHorizontal: 18,
-//         paddingTop: 36,
+//         paddingHorizontal: 16,
+//         paddingTop: 40,
 //         paddingBottom: 10,
 //     },
 //     navButton: {
@@ -82,22 +193,22 @@
 //         borderRadius: 24,
 //         alignItems: "center",
 //         justifyContent: "center",
-//         backgroundColor: "#232323",
+//         backgroundColor: "#222",
 //     },
 //     navTitle: {
 //         flex: 1,
 //         textAlign: "center",
 //         fontSize: 26,
 //         fontWeight: "bold",
-//         color: "#EFEFEF",
-//         letterSpacing: 0.5,
+//         color: "#E0E0E0",
 //     },
 //     header: {
 //         fontSize: 36,
 //         fontWeight: "bold",
-//         color: "#E0E0E0",
-//         marginLeft: 16,
-//         marginBottom: 20,
+//         color: "#D9DBDE",
+//         marginLeft: 18,
+//         marginBottom: 18,
+//         letterSpacing: 0.5,
 //     },
 //     grid: {
 //         flexDirection: "row",
@@ -105,160 +216,208 @@
 //         justifyContent: "center",
 //     },
 //     card: {
-//         width: 150,
-//         height: 168,
+//         width: 170,
+//         height: 170,
 //         backgroundColor: "#222",
 //         margin: 12,
 //         borderRadius: 22,
 //         alignItems: "center",
 //         justifyContent: "center",
-//         shadowColor: "#000",
-//         shadowOpacity: 0.06,
-//         shadowRadius: 4,
 //     },
 //     cardIconWrap: {
 //         backgroundColor: "#2591fa",
 //         borderRadius: 64,
-//         width: 88,
-//         height: 88,
+//         width: 90,
+//         height: 90,
 //         justifyContent: "center",
 //         alignItems: "center",
-//         marginBottom: 10,
+//         marginBottom: 15,
 //     },
 //     cardLabel: {
-//         color: "#dedede",
+//         color: "#f3f3f3",
 //         fontWeight: "bold",
-//         fontSize: 19,
+//         fontSize: 18,
 //         textAlign: "center",
 //         marginTop: 2,
+//         letterSpacing: 0.2,
 //     },
-//     tabBar: {
-//         height: 65,
-//         flexDirection: "row",
-//         backgroundColor: "#1E1E1E",
-//         borderTopWidth: 1,
-//         borderColor: "#232323",
-//         alignItems: "center",
-//         justifyContent: "space-around",
-//     },
-//     tabItem: {
+//     sidebarBackdrop: {
 //         flex: 1,
+//         backgroundColor: "rgba(0,0,0,0.4)",
+//     },
+//     sidebarContainer: {
+//         position: "absolute",
+//         top: 0,
+//         bottom: 0,
+//         left: 0,
+//         backgroundColor: "#222",
+//     },
+//     modalOverlay: {
+//         flex: 1,
+//         justifyContent: "flex-end",
+//         backgroundColor: "rgba(0,0,0,0.6)",
+//     },
+//     modalContent: {
+//         backgroundColor: "#2c2f36",
+//         borderTopLeftRadius: 20,
+//         borderTopRightRadius: 20,
+//         minHeight: 350,
+//         padding: 20,
+//         alignItems: "center",
+//     },
+//     modalHandle: {
+//         width: 60,
+//         height: 7,
+//         backgroundColor: "#51525a",
+//         borderRadius: 4,
+//         alignSelf: "center",
+//         marginBottom: 18,
+//     },
+//     modalTitle: {
+//         color: "#fff",
+//         fontSize: 26,
+//         fontWeight: "bold",
+//         marginBottom: 10,
+//     },
+//     modalSubtitle: {
+//         color: "#AAAEB8",
+//         fontSize: 16,
+//         marginBottom: 8,
+//     },
+//     modalAmount: {
+//         color: "#fff",
+//         fontSize: 48,
+//         fontWeight: "bold",
+//         marginBottom: 2,
+//         marginTop: 5,
+//     },
+//     modalTo: {
+//         color: "#AAAEB8",
+//         fontSize: 18,
+//         marginBottom: 30,
+//         marginTop: 5,
+//     },
+//     modalButton: {
+//         backgroundColor: "#2591fa",
+//         borderRadius: 10,
+//         width: "100%",
+//         height: 55,
 //         alignItems: "center",
 //         justifyContent: "center",
+//         marginBottom: 24,
 //     },
-//     tabLabel: {
-//         fontSize: 14,
-//         color: "#A0A0A0",
-//         marginTop: 2,
-//     }
+//     modalButtonText: {
+//         color: "#fff",
+//         fontWeight: "bold",
+//         fontSize: 20,
+//     },
+//     modalNote: {
+//         color: "#868686",
+//         fontSize: 15,
+//         textAlign: "center",
+//         marginTop: 10,
+//     },
 // });
-
-
-
-
-
-// import React, { useState } from "react";
-// import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-// import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-//
-// import Profile from './profile';   // Import your Profile component
-// // import Trends from './Trends';     // Import your Trends component
-// // import Settings from './Settings'; // Import your Settings component
-//
-// export default function Index() {
-//     const [activeTab, setActiveTab] = useState("Home");
-//
-//     const renderActiveScreen = () => {
-//         switch (activeTab) {
-//             case "Home":
-//                 return <Home />;
-//             case "Profile":
-//                 return <Profile />;
-//             case "Trends":
-//                 return <Trends />;
-//             case "Settings":
-//                 return <Settings />;
-//             default:
-//                 return <Home />;
-//         }
-//     };
-//
-//     return (
-//         <View style={styles.container}>
-//             {/* Top Nav */}
-//             <View style={styles.topNav}>
-//                 <TouchableOpacity style={styles.navButton}>
-//                     <MaterialCommunityIcons name="menu" size={28} color="#E0E0E0" />
-//                 </TouchableOpacity>
-//                 <Text style={styles.navTitle}>Campus Utility</Text>
-//                 <TouchableOpacity style={styles.navButton}>
-//                     <MaterialIcons name="person" size={28} color="#E0E0E0" />
-//                 </TouchableOpacity>
-//             </View>
-//
-//             <ScrollView contentContainerStyle={{ paddingTop: 14 }}>
-//                 {activeTab === "Home" && (
-//                     <>
-//                         <Text style={styles.header}>Services</Text>
-//                         <View style={styles.grid}>
-//                             <ServiceCard icon={<MaterialCommunityIcons name="bus" size={48} color="#fff" />} label="Shuttle" />
-//                             <ServiceCard icon={<MaterialCommunityIcons name="washing-machine" size={48} color="#fff" />} label="Paid Laundry" />
-//                             <ServiceCard icon={<MaterialCommunityIcons name="storefront-outline" size={48} color="#fff" />} label="Shawarma Shop" />
-//                             <ServiceCard icon={<MaterialCommunityIcons name="food" size={48} color="#fff" />} label="One Food World" />
-//                             <ServiceCard icon={<MaterialCommunityIcons name="coffee" size={48} color="#fff" />} label="Nescafe" />
-//                         </View>
-//                     </>
-//                 )}
-//                 {activeTab === "Profile" && <Profile />}
-//                 {activeTab === "Trends" && <Trends />}
-//                 {activeTab === "Settings" && <Settings />}
-//             </ScrollView>
-//
-//             {/* Bottom Tab Bar */}
-//             <View style={styles.tabBar}>
-//                 <TabItem isActive={activeTab === "Home"} icon={<MaterialIcons name="home" size={28} />} label="Home" onPress={() => setActiveTab("Home")} />
-//                 <TabItem isActive={activeTab === "Profile"} icon={<MaterialIcons name="person-outline" size={28} />} label="Profile" onPress={() => setActiveTab("Profile")} />
-//                 <TabItem isActive={activeTab === "Trends"} icon={<MaterialIcons name="trending-up" size={28} />} label="Trends" onPress={() => setActiveTab("Trends")} />
-//                 <TabItem isActive={activeTab === "Settings"} icon={<MaterialIcons name="settings" size={28} />} label="Settings" onPress={() => setActiveTab("Settings")} />
-//             </View>
-//         </View>
-//     );
-// }
-//
-// function ServiceCard({ icon, label }) {
-//     return (
-//         <View style={styles.card}>
-//             <View style={styles.cardIconWrap}>{icon}</View>
-//             <Text style={styles.cardLabel}>{label}</Text>
-//         </View>
-//     );
-// }
-//
-// function TabItem({ icon, label, isActive, onPress }) {
-//     return (
-//         <TouchableOpacity style={styles.tabItem} onPress={onPress}>
-//             {React.cloneElement(icon, { color: isActive ? "#2591fa" : "#A0A0A0" })}
-//             <Text style={[styles.tabLabel, isActive && { color: "#2591fa", fontWeight: "bold" }]}>{label}</Text>
-//         </TouchableOpacity>
-//     );
-// }
-//
-// const styles = StyleSheet.create({
-//     // same as your existing styles
-// });
-
-
-import React from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import Profile from "@/app/(tabs)/profile";
+import MenuPage from "@/app/(tabs)/Nescafe";
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    Modal,
+    Animated,
+    PanResponder,
+    Dimensions,
+} from "react-native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import Sidebar from "./Sidebar"; // Sidebar component
+import { openUpiApp } from "./ShuttlePay"; // UPI payment function
+
+const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
+const sidebarWidth = screenWidth * 0.75;
 
 export default function Index() {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [selectedPage, setSelectedPage] = useState("Home"); // page state
+    const panY = useRef(new Animated.Value(screenHeight)).current;
+    const sidebarTranslateX = useRef(new Animated.Value(-sidebarWidth)).current;
+
+    // Animate modal popup
+    const resetPosition = () => {
+        Animated.timing(panY, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+        }).start();
+    };
+    const closeModal = () => {
+        Animated.timing(panY, {
+            toValue: screenHeight,
+            duration: 300,
+            useNativeDriver: true,
+        }).start(() => setModalVisible(false));
+    };
+
+    const panResponder = useRef(
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onPanResponderMove: (evt, gestureState) => {
+                if (gestureState.dy > 0) {
+                    panY.setValue(gestureState.dy);
+                }
+            },
+            onPanResponderRelease: (evt, gestureState) => {
+                if (gestureState.dy > 100) {
+                    closeModal();
+                } else {
+                    resetPosition();
+                }
+            },
+        })
+    ).current;
+
+    // Animate sidebar slide in/out
+    useEffect(() => {
+        if (sidebarVisible) {
+            Animated.timing(sidebarTranslateX, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        } else {
+            Animated.timing(sidebarTranslateX, {
+                toValue: -sidebarWidth,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        }
+    }, [sidebarVisible]);
+
+    const openModal = () => {
+        setModalVisible(true);
+        resetPosition();
+    };
+
+    const closeSidebar = () => setSidebarVisible(false);
+
+    // Navigation handler passed to Sidebar
+    const handleNavigate = (page: string) => {
+        setSelectedPage(page);
+        setSidebarVisible(false);
+    };
 
     return (
         <View style={styles.container}>
             {/* Top Nav */}
             <View style={styles.topNav}>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity
+                    style={styles.navButton}
+                    onPress={() => setSidebarVisible(true)}
+                >
                     <MaterialCommunityIcons name="menu" size={30} color="#E0E0E0" />
                 </TouchableOpacity>
                 <Text style={styles.navTitle}>Campus Utility</Text>
@@ -267,16 +426,94 @@ export default function Index() {
                 </TouchableOpacity>
             </View>
 
-            <ScrollView contentContainerStyle={{ paddingTop: 22 }}>
-                <Text style={styles.header}>Services</Text>
-                <View style={styles.grid}>
-                    <ServiceCard icon={<MaterialCommunityIcons name="bus" size={48} color="#fff" />} label="Shuttle" />
-                    <ServiceCard icon={<MaterialCommunityIcons name="washing-machine" size={48} color="#fff" />} label="Paid Laundry" />
-                    <ServiceCard icon={<MaterialCommunityIcons name="storefront-outline" size={48} color="#fff" />} label="Shawarma Shop" />
-                    <ServiceCard icon={<MaterialCommunityIcons name="food" size={48} color="#fff" />} label="One Food World" />
-                    <ServiceCard icon={<MaterialCommunityIcons name="coffee" size={48} color="#fff" />} label="Nescafe" />
+            {/* Render content based on selected page */}
+            {selectedPage === "Home" && (
+                <ScrollView contentContainerStyle={{ paddingTop: 22 }}>
+                    <Text style={styles.header}>Services</Text>
+                    <View style={styles.grid}>
+                        <TouchableOpacity onPress={openModal}>
+                            <ServiceCard
+                                icon={<MaterialCommunityIcons name="bus" size={48} color="#fff" />}
+                                label="Shuttle"
+                            />
+                        </TouchableOpacity>
+                        <ServiceCard icon={<MaterialCommunityIcons name="washing-machine" size={48} color="#fff" />} label="Paid Laundry" />
+                        <ServiceCard icon={<MaterialCommunityIcons name="storefront-outline" size={48} color="#fff" />} label="Shawarma Shop" />
+                        <ServiceCard icon={<MaterialCommunityIcons name="food" size={48} color="#fff" />} label="One Food World" />
+                        <TouchableOpacity onPress={() => setSelectedPage('Menu')}>
+                            <ServiceCard
+                                icon={<MaterialCommunityIcons name="coffee" size={48} color="#fff" />}
+                                label="Nescafe"
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            )}
+
+            {selectedPage === "Profile" && <Profile />}
+
+            {selectedPage === "Settings" && (
+                <View style={pageStyles.pageContainer}>
+                    <Text style={pageStyles.pageTitle}>Settings Page</Text>
                 </View>
-            </ScrollView>
+            )}
+
+            {selectedPage === "Menu" && <MenuPage />}
+
+            {selectedPage === "Logout" && (
+                <View style={pageStyles.pageContainer}>
+                    <Text style={pageStyles.pageTitle}>Logout Page</Text>
+                </View>
+            )}
+
+            {/* Sidebar Modal */}
+            <Modal
+                visible={sidebarVisible}
+                animationType="none"
+                transparent
+                onRequestClose={closeSidebar}
+            >
+                <TouchableOpacity
+                    style={styles.sidebarBackdrop}
+                    activeOpacity={1}
+                    onPress={closeSidebar}
+                />
+                <Animated.View
+                    style={[
+                        styles.sidebarContainer,
+                        { width: sidebarWidth, transform: [{ translateX: sidebarTranslateX }] },
+                    ]}
+                >
+                    <Sidebar onClose={closeSidebar} onNavigate={handleNavigate} />
+                </Animated.View>
+            </Modal>
+
+            {/* Payment Modal */}
+            <Modal
+                visible={modalVisible}
+                animationType="none"
+                transparent
+                onRequestClose={closeModal}
+            >
+                <View style={styles.modalOverlay}>
+                    <Animated.View
+                        style={[styles.modalContent, { transform: [{ translateY: panY }] }]}
+                        {...panResponder.panHandlers}
+                    >
+                        <View style={styles.modalHandle} />
+                        <Text style={styles.modalTitle}>Complete Payment</Text>
+                        <Text style={styles.modalSubtitle}>You are about to pay</Text>
+                        <Text style={styles.modalAmount}>₹20.00</Text>
+                        <Text style={styles.modalTo}>to Campus Canteen</Text>
+                        <TouchableOpacity style={styles.modalButton} onPress={openUpiApp}>
+                            <Text style={styles.modalButtonText}>Open UPI App</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.modalNote}>
+                            You will be redirected to your UPI app to complete the payment.
+                        </Text>
+                    </Animated.View>
+                </View>
+            </Modal>
         </View>
     );
 }
@@ -356,5 +593,95 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginTop: 2,
         letterSpacing: 0.2,
+    },
+    sidebarBackdrop: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.4)",
+    },
+    sidebarContainer: {
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        backgroundColor: "#222",
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: "flex-end",
+        backgroundColor: "rgba(0,0,0,0.6)",
+    },
+    modalContent: {
+        backgroundColor: "#2c2f36",
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        minHeight: 350,
+        padding: 20,
+        alignItems: "center",
+    },
+    modalHandle: {
+        width: 60,
+        height: 7,
+        backgroundColor: "#51525a",
+        borderRadius: 4,
+        alignSelf: "center",
+        marginBottom: 18,
+    },
+    modalTitle: {
+        color: "#fff",
+        fontSize: 26,
+        fontWeight: "bold",
+        marginBottom: 10,
+    },
+    modalSubtitle: {
+        color: "#AAAEB8",
+        fontSize: 16,
+        marginBottom: 8,
+    },
+    modalAmount: {
+        color: "#fff",
+        fontSize: 48,
+        fontWeight: "bold",
+        marginBottom: 2,
+        marginTop: 5,
+    },
+    modalTo: {
+        color: "#AAAEB8",
+        fontSize: 18,
+        marginBottom: 30,
+        marginTop: 5,
+    },
+    modalButton: {
+        backgroundColor: "#2591fa",
+        borderRadius: 10,
+        width: "100%",
+        height: 55,
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 24,
+    },
+    modalButtonText: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 20,
+    },
+    modalNote: {
+        color: "#868686",
+        fontSize: 15,
+        textAlign: "center",
+        marginTop: 10,
+    },
+});
+
+const pageStyles = StyleSheet.create({
+    pageContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#181818",
+    },
+    pageTitle: {
+        fontSize: 32,
+        color: "#E0E0E0",
+        fontWeight: "bold",
     },
 });

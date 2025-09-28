@@ -86,12 +86,17 @@
     //
     //     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
     // };
-    import { createContext, useContext, useState } from "react";
+    import { createContext, useContext, useState, useEffect } from "react";
     import axios from "axios";
+    import AsyncStorage from "@react-native-async-storage/async-storage";
+
+    interface AuthState {
+        token: string | null;
+        authenticated: boolean;
+    }
 
     interface AuthContextType {
         authState: AuthState;
-        token: string | null;
         onRegister: (
             username: string,
             email: string,
@@ -99,6 +104,7 @@
             confirmPassword: string
         ) => Promise<void>;
         onLogin: (email: string, password: string) => Promise<void>;
+        logout: () => Promise<void>;
     }
 
     const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -109,8 +115,22 @@
             authenticated: false,
         });
 
+        const API_URL = "https://signupbackend-wrdy.onrender.com";
 
-        const API_URL = "https://signupbackend-wrdy.onrender.com"; // <-- your Render API
+        // Load token from AsyncStorage on provider mount
+        useEffect(() => {
+            const loadToken = async () => {
+                try {
+                    const token = await AsyncStorage.getItem("jwt_token");
+                    if (token) {
+                        setAuthState({ token, authenticated: false });
+                    }
+                } catch (error) {
+                    console.error("Failed to load token", error);
+                }
+            };
+            loadToken();
+        }, []);
 
         const onRegister = async (
             username: string,
@@ -121,23 +141,22 @@
             try {
                 const url = `${API_URL}/api/auth/signup`;
 
-                const response = await axios.post(url, {
-                    username,
-                    email,
-                    password,
-                    confirmPassword,
-                }, {
-                    headers: {
-                            "Content-Type": "application/json",
-                        }
-                    });
+                const response = await axios.post(
+                    url,
+                    {
+                        username,
+                        email,
+                        password,
+                        confirmPassword,
+                    },
+                    { headers: { "Content-Type": "application/json" } }
+                );
 
+                const jwtToken = response.data.token;
+                await AsyncStorage.setItem("jwt_token", jwtToken);
+                setAuthState({ token: jwtToken, authenticated: false });
 
-                const token = response.data.token;
-                setAuthState({token: jwtToken, authenticated: true});
-                console.log(url);
-                console.log(response.data);
-                console.log("Registered successfully:", user);
+                console.log("Registered successfully");
                 console.log("JWT token:", jwtToken);
             } catch (error: any) {
                 console.error("Registration failed:", error.response?.data || error.message);
@@ -145,39 +164,46 @@
         };
 
         const onLogin = async (email: string, password: string) => {
+            try {
+                const response = await axios.post(
+                    `${API_URL}/api/auth/login`,
+                    { email, password },
+                    { headers: { "Content-Type": "application/json" } }
+                );
 
-            try{
-                console.log(email, password);
-                const response = await axios.post(`${API_URL}/api/auth/login`, {email, password},
-                {
-                    headers: {"Content-Type": "application/json"}
-                });
+                // Adjust here as per actual backend response structure
+                const jwtToken = response.data.token;
+                const userID = response.data.user;
 
-                const jwtToken = response.data.user;
-                setAuthState({ token: jwtToken, authenticated: true });
-                console.log(email, password);
-                console.log(response.data);
+                await AsyncStorage.setItem("jwt_token", jwtToken)
+                await AsyncStorage.setItem("userID", userID);
+                setAuthState({ token: jwtToken, authenticated: true })
+                console.log(jwtToken);
 
-
-                console.log(response + "ihiuh");
-            }catch(error: any) {
-                if(error.response){
-                    console.error(error.response.data);
-                }
-                else if(error.request){
-                    console.error(error.request);
-                }
-                else{
-                    console.error(error.message);
+                console.log("Logged in successfully");
+            } catch (error: any) {
+                if (error.response) {
+                    console.error("Login failed:", error.response.data);
+                } else if (error.request) {
+                    console.error("No response:", error.request);
+                } else {
+                    console.error("Error:", error.message);
                 }
             }
+        };
 
-
-
+        const logout = async () => {
+            try {
+                await AsyncStorage.removeItem("jwt_token");
+                setAuthState({ token: null, authenticated: false });
+                console.log("Logged out");
+            } catch (error) {
+                console.error("Logout failed", error);
+            }
         };
 
         return (
-            <AuthContext.Provider value={{ authState, onRegister, onLogin }}>
+            <AuthContext.Provider value={{ authState, onRegister, onLogin, logout }}>
                 {children}
             </AuthContext.Provider>
         );
